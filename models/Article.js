@@ -13,11 +13,21 @@ const articleSchema = new mongoose.Schema({
   author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // assuming you have a User model
   images: [
     {
-      _id: { type: String },  // Cloudinary public ID
-      url: { type: String },  // Cloudinary URL
-    }
+      url: {
+        type: String,
+        required: [true],
+      },
+      _id: {
+        type: String,
+        required: [true],
+      },
+      blurDataURL: {
+        type: String,
+        required: [true, 'image-blur-data-url-required-error'],
+      },
+    },
   ],
-  createdOn: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Article', articleSchema);
+module.exports = mongoose.model('Post', articleSchema);

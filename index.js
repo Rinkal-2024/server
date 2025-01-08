@@ -3,12 +3,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+dotenv.config();
 const adminRoutes = require('./routes/adminRoutes');  
 const articleRoutes = require('./routes/articleRoutes');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
-
-dotenv.config();
+// const cloudinary = require('./config/cloudinary');
 
 const app = express();
 
@@ -17,8 +17,8 @@ app.use(express.json());
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI, { })
-  .then(() => console.log('MongoDB connected'))
-  .catch((err) => console.log('Error connecting to MongoDB:', err));
+.then(() => console.log('MongoDB connected'))
+.catch((err) => console.log('Error connecting to MongoDB:', err));
 
 // Routes
 app.use('/api', userRoutes);
