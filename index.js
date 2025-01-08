@@ -12,7 +12,10 @@ const userRoutes = require('./routes/user');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin : 'https://news-website-demo-ten.vercel.app'
+}
+));
 app.use(express.json()); 
 
 // MongoDB connection
