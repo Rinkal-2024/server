@@ -1,53 +1,46 @@
-const Admin = require('../models/Admin');
+// controllers/adminController.js
+const User = require('../models/User'); // Assuming you have a User model
 
-const registerAdmin = async (req, res) => {
-  const { name, email, password, category } = req.body;
-
-  try {
-    const existingAdmin = await Admin.findOne({ email });
-    if (existingAdmin) {
-      return res.status(400).json({ message: 'Admin already exists' });
+// Get all users (Admin dashboard)
+const getUsersByAdmin = async (req, res) => {
+    try {
+        const users = await User.find(); // You can add filters for pagination or active status
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching users' });
     }
-
-    const admin = new Admin({ name, email, password, category });
-    await admin.save();
-
-    res.status(201).json({
-      message: 'Admin registered successfully',
-      admin: {
-        name: admin.name,
-        email: admin.email,
-        category: admin.category,
-      },
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
 };
 
-const loginAdmin = async (req, res) => {
-  const { email, password } = req.body;
+// Update user role (admin can change user roles)
+const updateRoleByAdmin = async (req, res) => {
+    const { id } = req.params;
+    const { role } = req.body; // { role: "admin" or "user" }
 
-  try {
-    const admin = await Admin.findOne({ email });
-    if (!admin) {
-      return res.status(400).json({ message: 'Invalid email or password' });
+    try {
+        const user = await User.findById(id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        user.role = role; // Update role
+        await user.save();
+        res.status(200).json({ message: 'User role updated successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating role' });
     }
-
-    const isMatch = await admin.matchPassword(password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid email or password' });
-    }
-
-    const token = admin.generateToken();
-
-    res.status(200).json({
-      message: 'Login successful',
-      token,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
 };
 
-module.exports = { registerAdmin, loginAdmin };
+// Delete user (Admin panel functionality)
+const deleteUserByAdmin = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const user = await User.findById(id);
+        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        await user.remove();
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting user' });
+    }
+};
+
+module.exports = { getUsersByAdmin, updateRoleByAdmin, deleteUserByAdmin };

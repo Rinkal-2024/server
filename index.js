@@ -3,7 +3,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const adminRoutes = require('./routes/adminRoutes');
+const adminRoutes = require('./routes/adminRoutes');  
+const articleRoutes = require('./routes/articleRoutes');
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 
 dotenv.config();
 
@@ -18,10 +21,10 @@ mongoose.connect(process.env.MONGO_URI, { })
   .catch((err) => console.log('Error connecting to MongoDB:', err));
 
 // Routes
-app.use('/api/admin', adminRoutes);
-// app.use('/api/news', newsRoutes);
+app.use('/api', userRoutes);
+app.use('/api', authRoutes);
+app.use('/api', articleRoutes);
 
-// Start server
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Backend server running on port ${port}`);
