@@ -14,7 +14,7 @@ const app = express();
 
 app.use(cors({
   origin : 'https://news-website-demo-ten.vercel.app',
-  credentials: include
+  credentials: true
 }
 ));
 app.use(express.json()); 
