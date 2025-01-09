@@ -13,7 +13,7 @@ const userRoutes = require('./routes/user');
 const app = express();
 
 app.use(cors({
-  origin : 'https://news-website.vercel.app',
+  origin : 'https://news-website-five-peach.vercel.app',
   credentials: true
 }
 ));
